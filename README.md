@@ -1,18 +1,42 @@
-Have python, mysql and vscode installed
+# Project Deployment
 
-All commands to be entered in the root directory of the folder
+This guide will help you deploy your project. Ensure you have Python, MySQL, and VSCode installed.
 
-1.  Create venv certi_testor_deployement_env (recommended)
-    python -m venv certi_testor_deployement_env
+All commands should be executed in the root directory of your project folder.
 
-2. Activate it
-    Linux/macOS: source certi_testor_deployement_env/bin/activate  
-    Windows: certi_testor_deployement_env\Scripts\activate 
+## Recommended Steps
 
-3. pip3 install -r requirements.txt
+1. **Create a Virtual Environment**:
 
-4. Make sure the password is correct for root user for mysql in app.py
+   ``` 
+   python -m venv certi_testor_deployment_env
+   ```
 
-5. python3 app.py
+2. **Activate the Virtual Environment**:
+   - **Linux/macOS**:
+     ```bash
+     source certi_testor_deployment_env/bin/activate
+     ```
+   - **Windows**:
+     ```bash
+     certi_testor_deployment_env\Scripts\activate
+     ```
 
-http://127.0.0.1:7784
+## Mandatory Steps
+
+3. **Install Required Packages**:
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+4. **Verify MySQL Root User Password**:
+   - Ensure the MySQL root user's password is correct in `app.py`.
+
+5. **Run the Application**:
+   ```bash
+   python3 app.py
+   ```
+
+## Access the Application
+
+Open your browser and navigate to [http://127.0.0.1:7784](http://127.0.0.1:7784).
