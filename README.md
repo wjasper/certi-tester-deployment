@@ -9,17 +9,17 @@ All commands should be executed in the root directory of your project folder.
 1. **Create a Virtual Environment**:
 
    ``` 
-   python -m venv certi_testor_deployment_env
+   python -m venv certi_testor_deployement_env
    ```
 
 2. **Activate the Virtual Environment**:
    - **Linux/macOS**:
      ```bash
-     source certi_testor_deployment_env/bin/activate
+     source certi_testor_deployement_env/bin/activate
      ```
    - **Windows**:
      ```bash
-     certi_testor_deployment_env\Scripts\activate
+     certi_testor_deployement_env\Scripts\activate
      ```
 
 ## Mandatory Steps
@@ -40,3 +40,17 @@ All commands should be executed in the root directory of your project folder.
 ## Access the Application
 
 Open your browser and navigate to [http://127.0.0.1:7784](http://127.0.0.1:7784).
+
+
+## Added shell scripting
+
+start_certi_testor
+
+Entering this command anywhere works in the terminal
+(Only after this command has added in your zshrc profile
+)
+alias start_certi_testor='/Users/sunday/brainfuck/certi_testor_deployement/start_certi_testor.sh'  
+
+- Need to check it with windows.
+- Also the virtual env name needs to be certi_testor_deployement_env
+- Work on schedular on Windows

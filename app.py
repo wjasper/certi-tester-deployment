@@ -18,7 +18,6 @@ def index():
 
 @app.route('/api/test-connection', methods=['GET'])
 def test_connection():
-    print("Hello")
     connection_successful = database_management.verify_database_connection()
     if connection_successful:
         output = {"status": "true"}
