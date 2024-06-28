@@ -1,0 +1,27 @@
+services:
+  pythonapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    ports:
+      - '7784:7784'
+    command: sh -c "sleep 30s ; python3 ./app.py"
+    depends_on:
+      - mysql
+
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'certi_tsi'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+
+volumes:
+  mysql-data:
+    driver: local

@@ -4,9 +4,9 @@ from data_pipeline import data_processing, analyze_data, plot_graph, manage_test
 import socket
 
 #MySQL credentials
-HOST = 'localhost'
+HOST = 'mysql'
 USER = 'root'
-PASSWORD = 'c3rt1test3r'
+PASSWORD = 'root'
 DATABASE = 'certi_tsi'
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
@@ -98,5 +98,4 @@ def find_free_port():
     return port
 
 if __name__ == '__main__':
-    port = find_free_port()
-    app.run(port=port)
+    app.run(host='0.0.0.0', port=7784)

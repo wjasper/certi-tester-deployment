@@ -54,3 +54,41 @@ alias start_certi_testor='/Users/sunday/brainfuck/certi_testor_deployement/start
 - Need to check it with windows.
 - Also the virtual env name needs to be certi_testor_deployement_env
 - Work on schedular on Windows
+
+# Use the Python 3.9 slim image as base
+FROM python:3.9-slim AS python-base
+
+# Set working directory
+WORKDIR /app
+
+# Install necessary system dependencies
+RUN apt-get update && \
+    apt-get install -y default-libmysqlclient-dev build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy just the app.py file from your local directory into the container
+COPY app.py /app/
+
+# Uncomment and use this line if you have a requirements.txt file
+# COPY requirements.txt /app/
+# RUN pip install -r requirements.txt
+
+# Build stage for MySQL
+FROM mysql:latest AS mysql-base
+
+# Allow connections from any IP address
+RUN sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf
+
+# Set MySQL root password
+ENV MYSQL_ROOT_PASSWORD=c3rt1test3r
+
+# Final stage
+# Start a new build stage using Python base and MySQL base
+FROM python-base AS final
+
+# Install MySQL client in the Python image
+RUN apt-get update && apt-get install -y default-mysql-client
+
+# Example of how to run your application (adjust according to your needs)
+CMD ["python", "app.py"]
