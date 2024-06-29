@@ -5,7 +5,9 @@ Follow these steps to deploy the web server on your Raspberry Pi.
 ## 1. Clone the Repository
 
 Clone the repository to your desired location using the following command:
-```git clone https://github.com/nuttysunday/certitestor-deployment.git```
+```
+git clone https://github.com/nuttysunday/certitestor-deployment.git
+```
 
 ## 2. Install Docker
 
