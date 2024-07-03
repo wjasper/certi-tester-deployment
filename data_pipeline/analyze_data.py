@@ -1,5 +1,6 @@
 import database_management
 import pandas as pd
+from decimal import Decimal
 
 def analyze_test_records():
     query = """SELECT * FROM test_record"""
@@ -109,6 +110,7 @@ def analyze_test_record(test_type, test_arrays):
     penetration_data = []
     resistance_data = []
     sample_tags = []
+    test_time = []
     
     connection = database_management.start_connection()
     cursor = connection.cursor()
@@ -126,23 +128,27 @@ def analyze_test_record(test_type, test_arrays):
             sample_tags.append(test)
     
     elif test_type == "G":
-        query = "SELECT resistance FROM gravimetric_test WHERE sample_tag = %s"
+        query = "SELECT resistance, time_elapsed FROM gravimetric_test WHERE sample_tag = %s"
         for test in test_arrays:
             cursor.execute(query, (test,))
             results = cursor.fetchall()
             r_data = [result[0] for result in results]
+            t_data = [float(result[1]) for result in results] 
             resistance_data.append(r_data)
+            test_time.append(t_data)
             sample_tags.append(test)
     
     elif test_type == "L":
-        query = "SELECT penetration, resistance FROM loading_test WHERE sample_tag = %s"
+        query = "SELECT penetration, resistance, time_elapsed FROM loading_test WHERE sample_tag = %s"
         for test in test_arrays:
             cursor.execute(query, (test,))
             results = cursor.fetchall()
             p_data = [result[0] for result in results]
             r_data = [result[1] for result in results]
+            t_data = [float(result[2]) for result in results] 
             penetration_data.append(p_data)
             resistance_data.append(r_data)
+            test_time.append(t_data)
             sample_tags.append(test)
     
     database_management.end_connection(connection)
@@ -151,6 +157,7 @@ def analyze_test_record(test_type, test_arrays):
         "penetration_data": penetration_data,
         "resistance_data": resistance_data,
         "sample_tags": sample_tags,
+        "test_time": test_time,
     }
      
     return all_test_data

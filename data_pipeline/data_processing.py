@@ -11,7 +11,7 @@ def data_processing(file):
     #Checking if the sample with specific sample_tag exists or not, if it doesn't then we add it.
     sample_tag = data_insertion.insert_test_record(meta_data, df, file.filename)
     penetration_data = file_parser.df_data_formatting(df)
-    resistance_time_plot_data = plot_graph.generate_plotly_figure(df,'Resistance (mm of H2O)')
+    resistance_time_plot_data = plot_graph.generate_plotly_figure(df,'Resistance (mm of H2O)', test_type=meta_data[0])
     
     response_data = {
         'metaData': meta_data,
@@ -24,9 +24,10 @@ def data_processing(file):
             'analyze_current_penetration_data': None,
             'penetrationPlotData': 0,
             })
-                
+      
+     #Test is L or P test           
     else:
-        penetration_time_plot_data = plot_graph.generate_plotly_figure(df,'Penetration (%)')
+        penetration_time_plot_data = plot_graph.generate_plotly_figure(df,'Penetration (%)', test_type=meta_data[0])
         #We pass the sample_tag ID to get analysis of the current file
         analyze_current_penetration_data = analyze_data.analyze_current_penetration_data(meta_data ,sample_tag)
         response_data.update({

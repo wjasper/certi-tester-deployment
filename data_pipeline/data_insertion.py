@@ -46,11 +46,11 @@ def insert_g_data(df, sample_tag):
 def insert_load_data(df, sample_tag):
     connection = database_management.start_connection()
     cursor = connection.cursor()
-    
+
     sql_query = """
         INSERT INTO loading_test (
-            sample_tag, flow_rate, penetration, photometer_reading, mass_challenged_filter, resistance, test_time
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+            sample_tag, flow_rate, penetration, photometer_reading, mass_challenged_filter, resistance, test_time, time_elapsed
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
     
     # Add sample_tag to the beginning of each row's values
@@ -70,7 +70,7 @@ def insert_load_data(df, sample_tag):
 def insert_penetration_data(df, sample_tag):
     connection = database_management.start_connection()
     cursor = connection.cursor()
-    
+    print(df.head())
     sql_query = """
         INSERT INTO penetration_test (
             sample_tag, flow_rate, resistance, photometer_reading, penetration, test_time

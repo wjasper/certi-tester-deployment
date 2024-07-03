@@ -110,7 +110,7 @@ def parse_g_data(file):
         
         if parsing_data and line.strip() and not line.startswith('#'):
             parts = line.strip().split()
-            flow_rate = resistance = photo_reading = concentration = time_elapsed = 0
+            flow_rate = resistance = photo_reading = concentration = minutes_passed = 0
             for i in range(len(parts) - 1):
                 if parts[i] == 'F':
                     flow_rate = float(parts[i + 1])
@@ -128,12 +128,12 @@ def parse_g_data(file):
                     minute = int(parts[i+5])
                     second = int(parts[i+6])
                 elif parts[i] == 'T':
-                    time_elapsed = float(parts[i + 1])
+                    minutes_passed = float(parts[i + 1])
 
                 
             timestamp = pd.to_datetime(f"{year:04d}-{month:02d}-{day:02d} {hour:02d}:{minute:02d}:{second:02d}")
             
-            data.append([flow_rate, resistance, photo_reading, concentration, time_elapsed, weight_delta,timestamp])
+            data.append([flow_rate, resistance, photo_reading, concentration, minutes_passed, weight_delta,timestamp])
 
     return data
 
@@ -146,15 +146,17 @@ def process_penetration_data(data):
     df.drop(columns=['year', 'month', 'day', 'hour', 'min', 'sec'], inplace=True)
 
     df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%Y-%m-%d %H:%M:%S')
-
     return df
 
 def process_g_data(data):
-    df = pd.DataFrame(data, columns=['Flow Rate (liter/min)', 'Resistance (mm of H2O)', 'Photometric Reading (mV)', 'Concentration', 'Time elapsed', 'Delta weight', 'Timestamp'])
+    df = pd.DataFrame(data, columns=['Flow Rate (liter/min)', 'Resistance (mm of H2O)', 'Photometric Reading (mV)', 'Concentration', 'Minutes Passed', 'Delta weight', 'Timestamp'])
+    df['Minutes Passed'] = df['Minutes Passed'].round(2)
+    df.drop(df.tail(1).index, inplace=True)
     return df
 
 def process_load_data(data):
     df = pd.DataFrame(data, columns=['Flow Rate (liter/min)', 'Resistance (mm of H2O)', 'Photometric Reading (mV)', 'Penetration (%)', 'Mass Challenged Filter (mg)', 'Timestamp'])
+    df['Minutes Passed'] = ((df['Timestamp'] - df['Timestamp'].iloc[0]).dt.total_seconds() / 60).round(2)
     return df
 
 def file_parse(file):

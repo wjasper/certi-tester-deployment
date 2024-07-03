@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import database_management 
 from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
-import socket
 
 #MySQL credentials
 HOST = 'mysql'
@@ -82,20 +81,13 @@ def analyse_test_records():
     data = request.json
     selected_values = data.get('selectedValues', [])
     test_type = data.get('testType')
+    
     all_test_data = analyze_data.analyze_test_record(test_type, selected_values)
-    plot_data = plot_graph.generate_analyzed_graph(all_test_data)
-    return jsonify({'plotData': plot_data})
+    penetration_plot_data = plot_graph.generate_analyzed_penetration_graph(all_test_data, test_type)
+    resistance_plot_data = plot_graph.generate_analyzed_resistance_graph(all_test_data, test_type)
+    
+    return jsonify({'penetrationPlotData': penetration_plot_data, 'resistancePlotData':resistance_plot_data})
 
-def find_free_port():
-    default_port = 7784
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        sock.bind(('', default_port))
-    except socket.error:
-        sock.bind(('', 0))  
-    port = sock.getsockname()[1]
-    sock.close()
-    return port
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7784)

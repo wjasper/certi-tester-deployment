@@ -20,7 +20,7 @@ def initialize_database():
     cursor = connection.cursor()
 
     # Run the SQL script
-    with open('certi_testor_db_schema.sql', 'r') as file:
+    with open('certi_tester_db_schema.sql', 'r') as file:
         sql_commands = file.read()
 
     for command in sql_commands.split(';'):

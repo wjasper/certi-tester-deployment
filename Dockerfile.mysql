@@ -1,3 +1,3 @@
 FROM mysql:latest
 
-COPY ./certi_testor_db_schema.sql /docker-entrypoint-initdb.d/
+COPY ./certi_tester_db_schema.sql /docker-entrypoint-initdb.d/
