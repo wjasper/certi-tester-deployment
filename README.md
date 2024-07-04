@@ -3,8 +3,8 @@
 Follow these steps to deploy the web server on your Raspberry Pi.
 
 
-<details open>
-<summary>Important instructions</summary>
+<details>
+<summary style="font-size: 22px;">Important instructions</summary>
 
 1. Enter all the commands in the terminal.
 
@@ -39,8 +39,8 @@ Follow these steps to deploy the web server on your Raspberry Pi.
 
 
 
-<details open>
-<summary>Easy installation (automatically)</summary>
+<details>
+<summary style="font-size: 22px;">Easy installation (automatically)</summary>&nbsp;
 
    Description:- In this method, no code is required on the server, it downloads the pre built image from Dockerhub. We just just download the docker-compose file which fetches the certi tester software images from Dockerhub and then we spin up the container.
 
@@ -75,8 +75,8 @@ Follow these steps to deploy the web server on your Raspberry Pi.
 </details>
 
 
-<details open>
-<summary>Manual installation</summary>
+<details>
+<summary style="font-size: 22px;">Manual installation</summary>&nbsp;
 
 Description:- In this method, we download the code from github, and the build our images locally.
 
@@ -117,8 +117,9 @@ sudo docker-compose up --build -d
 ```
 </details>
 
-<details open>
-<summary>Accessing the Website on the Network</summary>
+<details>
+<summary style="font-size: 22px;">Accessing the Website on the Network</summary>
+&nbsp;
 
 To access the website from other devices on your network:
 
