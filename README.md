@@ -2,36 +2,47 @@
 
 Follow these steps to deploy the web server on your Raspberry Pi.
 
-Prerequisite: Have docker installed on your machine.
 
-**Enter all the commands in the terminal.**
+<details open>
+<summary>Important instructions</summary>
 
-**Sometimes you may need to use sudo for running some commands.**
+1. Enter all the commands in the terminal.
 
-**Make sure 7784 port is free and no other container or service is running on it**
+2. Sometimes you may need to use sudo for running some commands.
 
-### For Raspberry Pi
+3. Make sure 7784 port is free and no other container or service is running on it
 
-1. Install Docker:
-   ```
-   curl -sSL https://get.docker.com | sh
-   sudo usermod -aG docker $USER
-   docker --version
-   ```
+4. Have docker installed on your machine.
 
-2. Install Docker Compose:
-   ```
-   sudo curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-   sudo mv /usr/local/bin/docker-compose /usr/bin/docker-compose
-   sudo chmod +x /usr/bin/docker-compose
-   docker-compose --version
-   ```
+   <details>
+   <summary>Docker Installation for Raspberry Pi</summary>
 
-For other platforms, refer to the official Docker documentation: [Install Docker](https://www.docker.com/products/docker-desktop/).
+   1. Install Docker:
+      ```
+      curl -sSL https://get.docker.com | sh
+      sudo usermod -aG docker $USER
+      docker --version
+      ```
 
-### 1. Easy installation (automatically).
+   2. Install Docker Compose:
+      ```
+      sudo curl -L "https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      sudo mv /usr/local/bin/docker-compose /usr/bin/docker-compose
+      sudo chmod +x /usr/bin/docker-compose
+      docker-compose --version
+      ```
 
-   Description:- In this method, no code is required on the server, it downloads the pre built image from Dockerhub. We just just download the docke-compose file which fetches the certi tester software images from Dockerhub and then we spin up the container.
+   For other platforms, refer to the official Docker documentation: [Install Docker](https://www.docker.com/products/docker-desktop/).
+
+   </details>
+</details>
+
+
+
+<details open>
+<summary>Easy installation (automatically)</summary>
+
+   Description:- In this method, no code is required on the server, it downloads the pre built image from Dockerhub. We just just download the docker-compose file which fetches the certi tester software images from Dockerhub and then we spin up the container.
 
    ```
    mkdir certi_tester
@@ -61,47 +72,53 @@ For other platforms, refer to the official Docker documentation: [Install Docker
    docker-compose up -d --force-recreate
    ```
 
-### 2. Manual installation.
-
-   Description:- In this method, we download the code from github, and the build our images locally.
-
-   #### 1. Clone the Repository
-
-   Clone the repository to your desired location using the following command:
-   
-   ```
-   git clone https://github.com/nuttysunday/certitestor-deployment.git
-   ```
-
-   ```
-   cd certitestor-deployment
-   ```
-
-   #### 2. Start the Containers
-
-   Builds the image from scratch and runs the container in detached mode:
-   ```
-   sudo docker-compose up --build -d
-   ```
-
-   #### 3. Access the Application on Raspberry Pi
-
-   Open your browser and navigate to:
-   [http://127.0.0.1:7784](http://127.0.0.1:7784)
+</details>
 
 
-   #### 4. Updating the local images.
+<details open>
+<summary>Manual installation</summary>
 
-   Take the container down and build it again
-   ```
-   sudo docker-compose down
-   ```
+Description:- In this method, we download the code from github, and the build our images locally.
 
-   ```
-   sudo docker-compose up --build -d
-   ```
+#### 1. Clone the Repository
 
-## Access the Website on the Network
+Clone the repository to your desired location using the following command:
+
+```
+git clone https://github.com/nuttysunday/certitestor-deployment.git
+```
+
+```
+cd certitestor-deployment
+```
+
+#### 2. Start the Containers
+
+Builds the image from scratch and runs the container in detached mode:
+```
+sudo docker-compose up --build -d
+```
+
+#### 3. Access the Application on Raspberry Pi
+
+Open your browser and navigate to:
+[http://127.0.0.1:7784](http://127.0.0.1:7784)
+
+
+#### 4. Updating the local images.
+
+Take the container down and build it again
+```
+sudo docker-compose down
+```
+
+```
+sudo docker-compose up --build -d
+```
+</details>
+
+<details open>
+<summary>Accessing the Website on the Network</summary>
 
 To access the website from other devices on your network:
 
@@ -117,3 +134,4 @@ To access the website from other devices on your network:
    ```http://<IP_ADDRESS>:7784```
 
 Replace `<IP_ADDRESS>` with the static IP address of your Raspberry Pi.
+</details>
