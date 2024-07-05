@@ -95,3 +95,4 @@ if __name__ == '__main__':
     
     
 #testing CI/CD pipeline
+# Lets see if we get the latest images in Dockerhub
