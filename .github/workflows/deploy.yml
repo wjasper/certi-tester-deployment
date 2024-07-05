@@ -33,7 +33,7 @@ jobs:
           sleep 10 
 
       - name: Tagging the built images
-      - run: |
+        run: |
           docker tag certi_tester_deployment-pythonapp sundaydied/certi-tester:pythonapp
           docker tag certi_tester_deployment-mysql sundaydied/certi-tester:mysql
 
