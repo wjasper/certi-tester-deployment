@@ -28,8 +28,12 @@ jobs:
           docker ps -aq | xargs -r docker rm
 
       - name: Build and tag Docker images
-        run: |
-          docker-compose up --build
+        run: 
+          docker-compose up --build -d
+          sleep 10 
+
+      - name: Tagging the built images
+      - run: |
           docker tag certi_tester_deployment-pythonapp sundaydied/certi-tester:pythonapp
           docker tag certi_tester_deployment-mysql sundaydied/certi-tester:mysql
 
@@ -37,3 +41,7 @@ jobs:
         run: |
           docker push sundaydied/certi-tester:pythonapp
           docker push sundaydied/certi-tester:mysql
+      
+      - name: Taking the docker container down
+        run: | 
+           docker-compose down
