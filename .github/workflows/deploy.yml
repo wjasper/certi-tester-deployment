@@ -28,7 +28,7 @@ jobs:
           docker ps -aq | xargs -r docker rm
 
       - name: Build and tag Docker images
-        run: 
+        run: |
           docker-compose up --build -d
           sleep 10 
 
@@ -44,4 +44,4 @@ jobs:
       
       - name: Taking the docker container down
         run: | 
-           docker-compose down
+          docker-compose down
