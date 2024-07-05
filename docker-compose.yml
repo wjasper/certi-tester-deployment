@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.python
+    image: certi-tester-pythonapp
     restart: always
     ports:
       - '7784:7784'
@@ -14,6 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.mysql
+    image: certi-tester-mysql
     restart: always
     environment:
       MYSQL_DATABASE: 'certi_tsi'

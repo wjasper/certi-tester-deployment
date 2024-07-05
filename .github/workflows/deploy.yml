@@ -34,8 +34,8 @@ jobs:
 
       - name: Tagging the built images
         run: |
-          docker tag certi_tester_deployment-pythonapp sundaydied/certi-tester:pythonapp
-          docker tag certi_tester_deployment-mysql sundaydied/certi-tester:mysql
+          docker tag certi-tester-pythonapp sundaydied/certi-tester:pythonapp
+          docker tag certi-tester-mysql sundaydied/certi-tester:mysql
 
       - name: Push Docker images to Docker Hub
         run: |
