@@ -6,3 +6,4 @@ start_certi_testor.sh
 Dockerfile.mysql
 Dockerfile.python
 docker-compose.yml
+easy-installation/

@@ -85,11 +85,11 @@ Description:- In this method, we download the code from github, and the build ou
 Clone the repository to your desired location using the following command:
 
 ```
-git clone https://github.com/nuttysunday/certitestor-deployment.git
+git clone https://github.com/nuttysunday/certitester-deployment.git
 ```
 
 ```
-cd certitestor-deployment
+cd certitester-deployment
 ```
 
 #### 2. Start the Containers

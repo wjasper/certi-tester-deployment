@@ -3,7 +3,7 @@ services:
     image: sundaydied/certi-tester:pythonapp
     ports:
       - '7784:7784'
-    command: sh -c "sleep 30s ; python3 ./app.py"
+    command: sh -c "sleep 30s ; gunicorn -w 4 -b 0.0.0.0:7784 app:app"
     depends_on:
       - mysql
 

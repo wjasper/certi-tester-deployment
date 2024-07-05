@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify, render_template
-import database_management 
-from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
 
 #MySQL credentials
 HOST = 'mysql'
 USER = 'root'
 PASSWORD = 'root'
 DATABASE = 'certi_tsi'
+
+import database_management 
+from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
 
