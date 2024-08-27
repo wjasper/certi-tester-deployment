@@ -89,6 +89,12 @@ def analyse_test_records():
     
     return jsonify({'penetrationPlotData': penetration_plot_data, 'resistancePlotData':resistance_plot_data})
 
+@app.route('/api/export-test-records', methods=['POST'])
+def export_test_records():
+    data = request.json
+    selected_values = data.get('selectedValues', [])
+    export_data = manage_test_records.export_test_records(selected_values)
+    return jsonify(export_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7784)
