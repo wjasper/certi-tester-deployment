@@ -75,6 +75,7 @@ def export_test_records(test_records):
 
         export_data.append({
             'sampleTag': record['sampleTag'],
+            'testType': record['testType'],
             'columnNames': column_names,  # Include column names in the result
             'data': formatted_result
         })

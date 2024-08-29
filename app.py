@@ -47,9 +47,6 @@ def upload_file():
         if file.filename == '':
             return 'No selected file'
         
-        if file and file.filename and file.stream and file.stream.read(1) == b'':
-            return {'Error': 'Empty file'}
-        
         if file:
             responseData = data_processing.data_processing(file)
             return jsonify(responseData)
@@ -98,5 +95,3 @@ def export_test_records():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7784)
-    
-#NOT ABLE TO PUSH

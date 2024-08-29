@@ -1,5 +1,5 @@
 import pandas as pd
-from io import TextIOWrapper
+import json
 
 def parse_metadata(file):
     meta_data = []
@@ -84,26 +84,11 @@ def parse_load_data(file):
 
     return data
 
-def find_delta_weight(file): 
-    wi = 0
-    wf = 0   
-    file.seek(0)
-    for line in file:
-        if line.startswith('WI'):
-            parts = line.split()
-            wi = float(parts[1])
-            wf = float(parts[3]) if len(parts) > 3 and parts[2] == 'WF' else None
-            break
 
-    return round(wf - wi, 2)
-
-
-def parse_g_data(file):
-    weight_delta = find_delta_weight(file)
+def parse_g_data(file, weight_delta):
     data = []
     parsing_data = False
     
-    file.seek(0)
     for line in file:
         if not parsing_data and 'F' in line:
             parsing_data = True
@@ -160,28 +145,44 @@ def process_load_data(data):
     return df
 
 def file_parse(file):
-    with TextIOWrapper(file, encoding='utf-8') as f:
-        meta_data = parse_metadata(f)
-        if meta_data[0] == "P":
-            f.seek(0)
-            data = parse_penetration_data(f)
-            df = process_penetration_data(data)
-            return meta_data, df
+    file_content = file.read().decode('utf-8') 
+    json_data = json.loads(file_content)
 
-        elif meta_data[0] == "L":
-            f.seek(0)
-            data = parse_load_data(f)
-            df = process_load_data(data)
-            return meta_data, df
-        
-        elif meta_data[0] == "G":
-            f.seek(0)
-            data = parse_g_data(f)
-            df = process_g_data(data)
-            return meta_data, df
-        
-        else:
-            return None
+    test_type = json_data.get('TestType')
+    operator = json_data.get('Operator')
+    notes = json_data.get('Notes')
+    data = json_data.get('Data')
+
+    meta_data = {
+        'test_type': test_type,
+        'operator': operator,
+        'notes': notes
+    }
+
+    # Process the data based on the TestType
+    if test_type == "P":
+        processed_data = parse_penetration_data(data)
+        df = process_penetration_data(processed_data)
+        return meta_data, df
+
+    elif meta_data[0] == "L":
+        processed_data = parse_load_data(data)
+        df = process_load_data(processed_data)
+        return meta_data, df
+    
+    elif meta_data[0] == "G":
+        initial_weight = float(json_data.get('InitialWeight'))
+        final_weight = float(json_data.get('FinalWeight'))
+
+        # Calculate the delta weight and round it to 2 decimal places
+        weight_delta = round(final_weight - initial_weight, 2)
+
+        processed_data = parse_g_data(data, weight_delta)
+        df = process_g_data(processed_data)
+        return meta_data, df
+    
+    else:
+        return None
 
 def df_data_formatting(df):
     """

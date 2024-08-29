@@ -99,12 +99,9 @@ def insert_test_record(meta_data, df, filename):
     connection = database_management.start_connection()
     cursor = connection.cursor()
     
-    try:
-        test_type = meta_data[0].strip('"') 
-        operator = meta_data[1].strip('"') 
-        comment = meta_data[2].strip('"') 
-    except IndexError:
-        test_type = operator = comment = None
+    test_type = meta_data.get('test_type', '').strip('"')
+    operator = meta_data.get('operator', '').strip('"')
+    comment = meta_data.get('notes', '').strip('"')
     
     sample_tag = sample_tag_generator(df, filename)
     
@@ -113,12 +110,12 @@ def insert_test_record(meta_data, df, filename):
         cursor.execute(query, (sample_tag, test_type, operator, comment))
         connection.commit()
         
-        if meta_data[0] == "G":
-            insert_g_data(df,sample_tag)
-        elif meta_data[0] == "P":
-            insert_penetration_data(df,sample_tag)
-        elif meta_data[0] == "L":
-            insert_load_data(df,sample_tag)
+        if test_type == "G":
+            insert_g_data(df, sample_tag)
+        elif test_type == "P":
+            insert_penetration_data(df, sample_tag)
+        elif test_type == "L":
+            insert_load_data(df, sample_tag)
         
     except mysql.connector.IntegrityError as e:
         print(f"Error: {e}")

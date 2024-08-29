@@ -57,11 +57,11 @@ def analyze_current_penetration_data(meta_data, sample_tag):
     """
     Analyzes the current penetration data
     """
-    if meta_data[0] == "P":
+    if meta_data.get('test_type') == "P":
         table = "penetration_test"
-    elif meta_data[0] == "L":
+    elif meta_data.get('test_type') == "L":
         table = "loading_test"
-    elif meta_data[0] == "G":
+    elif meta_data.get('test_type') == "G":
         table = "gravimetric_test"
  
     return analyze_penetration_data(table, sample_tag)
