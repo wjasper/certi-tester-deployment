@@ -165,12 +165,12 @@ def file_parse(file):
         df = process_penetration_data(processed_data)
         return meta_data, df
 
-    elif meta_data[0] == "L":
+    elif test_type == "L":
         processed_data = parse_load_data(data)
         df = process_load_data(processed_data)
         return meta_data, df
     
-    elif meta_data[0] == "G":
+    elif test_type == "G":
         initial_weight = float(json_data.get('InitialWeight'))
         final_weight = float(json_data.get('FinalWeight'))
 
