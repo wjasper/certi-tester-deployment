@@ -1,5 +1,5 @@
 import mysql.connector
-from app import HOST, USER, PASSWORD, DATABASE
+from config import HOST, USER, PASSWORD, DATABASE
 
 
 # Define your database configuration

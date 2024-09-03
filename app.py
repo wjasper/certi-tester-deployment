@@ -3,11 +3,6 @@ import database_management
 from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
 from certi_tester import certi_device
 
-#MySQL credentials
-HOST = 'mysql'
-USER = 'root'
-PASSWORD = 'root'
-DATABASE = 'certi_tsi'
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
 
