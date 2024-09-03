@@ -23,12 +23,15 @@ def buffer_initialization(meta_data):
                 }
     print(buffer)
     return buffer, date_time
-   
 
-def start_reading(timer, buffer, date_time, stop_event):
-    end_time = time.time() + (timer * 60)
+
+def start_reading(timer, buffer, date_time):
+    print("in the function start reading")
+    print(buffer)
     
-    if sys.platform == "linux" or sys.platform == "linux2":
+    end_time = time.time() + timer
+    
+    try:
         serialPort = serial.Serial(
             port="/dev/ttyUSB0",
             baudrate=9600,
@@ -38,36 +41,38 @@ def start_reading(timer, buffer, date_time, stop_event):
             parity=serial.PARITY_ODD,
             rtscts=True,
             dsrdtr=True)
-
+        
         while time.time() < end_time:
             # Wait until there is data waiting in the serial buffer
-            
             if serialPort.in_waiting > 0:
                 # Read data out of the buffer until a carriage return / new line is found
                 serialString = serialPort.readline()
                 certiString = serialString.decode()
                 print(certiString, end="")
-
+                
                 if date_time:  # append a date time
                     current_time = datetime.datetime.now()
                     date_string = current_time.strftime(" %m %d %Y %H %M %S")
                     buffer["Data"].append(certiString[:-2] + date_string)
                 else:
                     buffer["Data"].append(certiString[:-2])
+            
+            buffer["Data"].append("Mission successful, python script inside docker container, can access the port, not sure about reading")
 
             time.sleep(1)
     
-    #simulating buffer for developement as I dont have access to hardware, also the platform is Darwin (MacOS) 
-    else:
+    except Exception as e:
+        buffer["Data"].append("This is simulated data couldn't connect to device")
+        print(f"Error occurred: {e}")
+        print("Falling back to simulated data")
         while time.time() < end_time:
-            if stop_event.is_set():
-                print("Timer was stopped.")
-                return
             # Simulate reading data
+            buffer["Data"].append(time.time())
             print(time.time())
             time.sleep(1)  # Sleep to prevent busy-waiting
+            
         
-    
+
     print("Timer completed")
     print(buffer)
     
