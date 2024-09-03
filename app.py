@@ -1,13 +1,14 @@
 from flask import Flask, request, jsonify, render_template
+import database_management 
+from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
+from certi_tester import certi_device
+import threading
 
 #MySQL credentials
-HOST = 'mysql'
+HOST = 'localhost'
 USER = 'root'
 PASSWORD = 'root'
 DATABASE = 'certi_tsi'
-
-import database_management 
-from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
 
@@ -92,6 +93,70 @@ def export_test_records():
     selected_values = data.get('selectedValues', [])
     export_data = manage_test_records.export_test_records(selected_values)
     return jsonify(export_data)
+
+
+# JUST DOING THE P TEST
+# WORKING ONLY WITH TIMER AS OF NOW
+
+@app.route('/api/certi-tester-device', methods=['POST'])
+def certi_tester_device():
+    meta_data = request.get_json()
+    buffer, date_time = certi_device.buffer_initialization(meta_data)
+    
+    response = {
+        "buffer": buffer,
+        "date_time": date_time
+    }
+    
+    return jsonify(response), 200
+
+# working with threading to make sure only one timer is active
+# Want to override it with the latest one 
+
+
+# Global variables to manage the current timer thread and stop event
+current_timer_thread = None
+stop_event = threading.Event()
+
+@app.route('/api/certi-tester-device-timer', methods=['POST'])
+def certi_tester_device_timer():
+    
+    global current_timer_thread, stop_event
+    
+    if current_timer_thread and current_timer_thread.is_alive():
+        stop_event.set()  # Signal the existing timer to stop
+        current_timer_thread.join()  # Wait for the existing timer to finish
+        stop_event.clear()  # Clear the stop event for the new timer
+    
+    data = request.get_json()  # Get the JSON data sent from the frontend
+    
+    print('Received Data:', data)
+    
+    # Extract the fields from the received data
+    # Safely retrieve and convert the timer value
+    timer = data.get('timer')
+    if timer is None:
+        return jsonify({'error': 'Missing timer value'}), 400
+    
+    try:
+        timer = int(timer)
+    except ValueError:
+        return jsonify({'error': 'Invalid timer value'}), 400
+    buffer = data.get('buffer')
+    date_time = data.get('date_time')
+    
+    
+    # Define a wrapper function to call `start_reading`
+    def wrapper_start_reading(timer, buffer, date_time):
+        buffer = certi_device.start_reading(timer, buffer, date_time, stop_event)
+
+    # Start a new timer
+    current_timer_thread = threading.Thread(target=wrapper_start_reading, args=(timer, buffer, date_time))
+    current_timer_thread.start()
+
+    # Return the processed buffer data as JSON
+    return jsonify("buffer")
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=7784)
