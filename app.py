@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 
 #MySQL credentials
-HOST = 'localhost'
+HOST = 'mysql'
 USER = 'root'
 PASSWORD = 'root'
 DATABASE = 'certi_tsi'
