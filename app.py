@@ -4,7 +4,7 @@ from data_pipeline import data_processing, analyze_data, plot_graph, manage_test
 from certi_tester import certi_device
 
 #MySQL credentials
-HOST = 'localhost'
+HOST = 'mysql'
 USER = 'root'
 PASSWORD = 'root'
 DATABASE = 'certi_tsi'
