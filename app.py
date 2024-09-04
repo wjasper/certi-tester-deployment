@@ -3,7 +3,6 @@ import database_management
 from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
 from certi_tester import certi_device
 
-
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
 
 # Serve the build version of frontend code (REACT)
@@ -89,7 +88,6 @@ def export_test_records():
     return jsonify(export_data)
 
 
-# JUST DOING THE P TEST
 # WORKING ONLY WITH TIMER AS OF NOW
 
 @app.route('/api/certi-tester-device', methods=['POST'])
@@ -129,4 +127,4 @@ def certi_tester_device_timer():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=7784)
+    app.run(host='0.0.0.0', debug=True, port=7784)
