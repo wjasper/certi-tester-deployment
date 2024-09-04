@@ -1,5 +1,5 @@
 #MySQL credentials
-HOST = 'localhost'
+HOST = 'mysql'
 USER = 'root'
 PASSWORD = 'root'
 DATABASE = 'certi_tsi'
