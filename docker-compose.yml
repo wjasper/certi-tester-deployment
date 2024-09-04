@@ -1,0 +1,33 @@
+services:
+  pythonapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    image: certi-tester-pythonapp
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
+    ports:
+      - '7784:7784'
+    command: sh -c "sleep 30s ; python3 ./app.py"
+    depends_on:
+      - mysql
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+
+
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    image: certi-tester-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'certi_tsi'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+    driver: local
