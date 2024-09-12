@@ -89,41 +89,20 @@ def export_test_records():
 
 
 # WORKING ONLY WITH TIMER AS OF NOW
-
 @app.route('/api/certi-tester-device', methods=['POST'])
 def certi_tester_device():
     meta_data = request.get_json()
-    buffer, date_time = certi_device.buffer_initialization(meta_data)
     
-    response = {
-        "buffer": buffer,
-        "date_time": date_time
-    }
+    buffer = certi_device.buffer_initialization(meta_data)
     
-    return jsonify(response), 200
-
-
-
-@app.route('/api/certi-tester-device-timer', methods=['POST'])
-def certi_tester_device_timer():
-    
-    data = request.get_json()  # Get the JSON data sent from the frontend
-
-    print('Received Data:', data)
-    
-    # Extract the fields from the received data
-    # Safely retrieve and convert the timer value
-    timer = data.get('timer')
-    buffer = data.get('buffer')
-    date_time = data.get('date_time')
-    
-    
-    buffer = certi_device.start_reading(timer, buffer, date_time)
-
-
     print("Buffer by the machine sent", buffer)
-    # Return the processed buffer data as JSON
+    
     return jsonify(buffer)
+
+@app.route('/api/stop-timer', methods=['POST'])
+def stop_timer_endpoint():
+    certi_device.end_reading()  # Call the function to stop the timer
+    return jsonify({"status": "Timer stopped"})
 
 
 if __name__ == '__main__':
