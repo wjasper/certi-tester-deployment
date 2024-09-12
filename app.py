@@ -99,10 +99,11 @@ def certi_tester_device():
     
     return jsonify(buffer)
 
-@app.route('/api/stop-timer', methods=['POST'])
+@app.route('/api/end-timer', methods=['GET'])
 def stop_timer_endpoint():
     certi_device.end_reading()  # Call the function to stop the timer
-    return jsonify({"status": "Timer stopped"})
+    print("Buffer by the machine sent if timer hit in the middle")
+    return jsonify("buffer")
 
 
 if __name__ == '__main__':

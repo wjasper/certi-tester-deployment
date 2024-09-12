@@ -8,7 +8,6 @@ import threading
 
 # Global flag to end the timer
 stop_flag = threading.Event()
-buffer = {}
 
 def start_reading(timer, buffer, date_time):
     print("in the function start reading")
@@ -90,7 +89,7 @@ def start_reading(timer, buffer, date_time):
 def buffer_initialization(meta_data):    
     
     global stop_flag
-    
+
     date_time = False
     initial_weight = None
     final_weight = None
