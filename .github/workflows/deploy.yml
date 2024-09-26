@@ -39,13 +39,13 @@ jobs:
 
       - name: Tagging the built images
         run: |
-          docker tag certi-tester-pythonapp sundaydied/certi-tester:pythonapp
-          docker tag certi-tester-mysql sundaydied/certi-tester:mysql
+          docker tag certi-tester-pythonapp wjjasper/certi-tester:pythonapp
+          docker tag certi-tester-mysql wjjasper/certi-tester:mysql
 
       - name: Push Docker images to Docker Hub
         run: |
-          docker push sundaydied/certi-tester:pythonapp
-          docker push sundaydied/certi-tester:mysql
+          docker push wjjasper/certi-tester:pythonapp
+          docker push wjjasper/certi-tester:mysql
       
       - name: Taking the docker container down
         run: | 
