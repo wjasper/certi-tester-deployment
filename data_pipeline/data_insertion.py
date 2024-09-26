@@ -178,4 +178,4 @@ def insert_test_record(meta_data, df, filename):
         cursor.close()
         database_management.end_connection(connection)
         
-    return
+    return sample_tag
