@@ -4,11 +4,9 @@ from flask_socketio import SocketIO
 import database_management 
 from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
 from certi_tester import certi_device
-import eventlet
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
-CORS(app)
-socketio = SocketIO(app, cors_allowed_origins=["http://localhost:7784"])
+socketio = SocketIO(app, cors_allowed_origins="http://localhost:7784")
 
 # Serve the build version of frontend code (REACT)
 @app.route('/')
@@ -151,5 +149,6 @@ def stop_timer_endpoint():
     return jsonify("buffer")
 
 if __name__ == '__main__':
+    #socketio.run(app, debug=True, port=7784) 
     socketio.run(app, host='0.0.0.0', debug=True, port=7784)
     #app.run(host='0.0.0.0', debug=True, port=7784)
