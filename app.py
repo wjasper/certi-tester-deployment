@@ -7,6 +7,7 @@ from certi_tester import certi_device
 import eventlet
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
+CORS(app)
 socketio = SocketIO(app, cors_allowed_origins=["http://localhost:7784"])
 
 # Serve the build version of frontend code (REACT)
