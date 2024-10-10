@@ -68,7 +68,8 @@ def generate_penetration_box_plot(files_array, all_penetration_data):
 
     fig.update_layout(title='Penetration Data for Selected Files',
                         xaxis_title='File',
-                        yaxis_title='Penetration')
+                        yaxis_title='Penetration',
+                        yaxis=dict(range=[0, 100]))
     
     return fig.to_json()
 

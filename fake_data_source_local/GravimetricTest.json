@@ -1,0 +1,12 @@
+{
+  "TestType": "G",
+  "Operator": "Warren Jasper",
+  "Notes": "Gravimetric Test with json output",
+  "InitialWeight": "6.1",
+  "FinalWeight": "6.5",
+  "Data": [
+    "F 81.45  R 253.79  U 2.866 mv    c 0.000 mg/m3  08 19 24 15 42 30  T 0.0",
+    "F 80.82  R 251.70  U 3.472 mv    c 0.000 mg/m3  08 19 24 15 43 30  T 1.001667",
+    "F 79.66  R 251.92  U 3.402 mv    c 0.000 mg/m3  08 19 24 15 44 30  T 2.003333"
+  ]
+}

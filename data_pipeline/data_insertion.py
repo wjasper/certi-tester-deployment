@@ -22,22 +22,40 @@ def sample_tag_generator(df, filename):
 def insert_g_data(df, sample_tag):
     connection = database_management.start_connection()
     cursor = connection.cursor()
-   
-    sql_query = """
+
+    # Map DataFrame column names to the database column names
+    df_to_db_column_map = {
+        'Flow Rate (liter/min)': 'flow_rate',
+        'Resistance (mm of H2O)': 'resistance',
+        'Photometric Reading (mV)': 'photometer_reading',
+        'Concentration': 'concentration',
+        'Minutes Passed': 'time_elapsed',
+        'Delta weight': 'weight_difference',
+        'Timestamp': 'test_time'
+    }
+
+    # Define the order of columns to insert
+    db_columns = ['sample_tag'] + list(df_to_db_column_map.values())
+
+    # Create the SQL query string
+    columns_str = ', '.join(db_columns)
+    placeholders_str = ', '.join(['%s'] * len(db_columns))
+
+    sql_query = f"""
         INSERT INTO gravimetric_test (
-            sample_tag, flow_rate, photometer_reading, resistance, concentration, time_elapsed, weight_difference, test_time
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            {columns_str}
+        ) VALUES ({placeholders_str})
     """
-    
-    # Add sample_tag to the beginning of each row's values
-    values = df.to_numpy().tolist()
+
+    # Extract and map the relevant columns from the DataFrame
+    values = df[list(df_to_db_column_map.keys())].to_numpy().tolist()
     values = [[sample_tag] + row for row in values]
-    
+
+    # Execute the SQL query
     cursor.executemany(sql_query, values)
-    
+
     connection.commit()
     cursor.close()
-
     database_management.end_connection(connection)
 
     return
@@ -47,21 +65,41 @@ def insert_load_data(df, sample_tag):
     connection = database_management.start_connection()
     cursor = connection.cursor()
 
-    sql_query = """
+    print(df.columns)
+
+    # Map DataFrame columns to the corresponding database column names
+    df_to_db_column_map = {
+        'Flow Rate (liter/min)': 'flow_rate',
+        'Penetration (%)': 'penetration',
+        'Photometric Reading (mV)': 'photometer_reading',
+        'Mass Challenged Filter (mg)': 'mass_challenged_filter',
+        'Resistance (mm of H2O)': 'resistance',
+        'Timestamp': 'test_time',
+        'Minutes Passed': 'time_elapsed'
+    }
+
+    # Define the order of columns to insert
+    db_columns = ['sample_tag'] + list(df_to_db_column_map.values())
+
+    # Create the SQL query string
+    columns_str = ', '.join(db_columns)
+    placeholders_str = ', '.join(['%s'] * len(db_columns))
+
+    sql_query = f"""
         INSERT INTO loading_test (
-            sample_tag, flow_rate, penetration, photometer_reading, mass_challenged_filter, resistance, test_time, time_elapsed
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            {columns_str}
+        ) VALUES ({placeholders_str})
     """
-    
-    # Add sample_tag to the beginning of each row's values
-    values = df.to_numpy().tolist()
+
+    # Extract and map the relevant columns from the DataFrame
+    values = df[list(df_to_db_column_map.keys())].to_numpy().tolist()
     values = [[sample_tag] + row for row in values]
-    
+
+    # Execute the SQL query
     cursor.executemany(sql_query, values)
-    
+
     connection.commit()
     cursor.close()
-
     database_management.end_connection(connection)
 
     return
@@ -70,22 +108,39 @@ def insert_load_data(df, sample_tag):
 def insert_penetration_data(df, sample_tag):
     connection = database_management.start_connection()
     cursor = connection.cursor()
-    print(df.head())
-    sql_query = """
+    print(df.columns)
+
+    # Map DataFrame columns to the corresponding database column names
+    df_to_db_column_map = {
+        'Flow Rate (liter/min)': 'flow_rate',
+        'Resistance (mm of H2O)': 'resistance',
+        'Photometric Reading (mV)': 'photometer_reading',
+        'Penetration (%)': 'penetration',
+        'Timestamp': 'test_time'
+    }
+
+    # Define the order of columns to insert
+    db_columns = ['sample_tag'] + list(df_to_db_column_map.values())
+
+    # Create the SQL query string
+    columns_str = ', '.join(db_columns)
+    placeholders_str = ', '.join(['%s'] * len(db_columns))
+
+    sql_query = f"""
         INSERT INTO penetration_test (
-            sample_tag, flow_rate, resistance, photometer_reading, penetration, test_time
-        ) VALUES (%s, %s, %s, %s, %s, %s)
+            {columns_str}
+        ) VALUES ({placeholders_str})
     """
-    
-    # Add sample_tag to the beginning of each row's values
-    values = df.to_numpy().tolist()
+
+    # Extract and map the relevant columns from the DataFrame
+    values = df[list(df_to_db_column_map.keys())].to_numpy().tolist()
     values = [[sample_tag] + row for row in values]
-    
+
+    # Execute the SQL query
     cursor.executemany(sql_query, values)
-    
+
     connection.commit()
     cursor.close()
-
     database_management.end_connection(connection)
 
     return
@@ -123,4 +178,4 @@ def insert_test_record(meta_data, df, filename):
         cursor.close()
         database_management.end_connection(connection)
         
-    return
+    return sample_tag

@@ -1,0 +1,15 @@
+{
+  "TestType": "L",
+  "Operator": "Warren Jasper",
+  "Notes": "Loading Test with json output",
+  "InitialWeight": null,
+  "FinalWeight": null,
+  "Data": [
+    "F 81.84  R 253.79  P -999.000000  U 3.434 mv 08 19 24 15 48 27  INVALID  M 0.2 mg",
+    "F 80.20  R 253.79  P 34.492516  U 3.413 mv 08 19 24 15 49 27  M 0.4 mg",
+    "F 79.66  R 253.79  P 44.125876  U 3.391 mv 08 19 24 15 50 27  M 0.6 mg",
+    "F 79.31  R 253.79  P 48.181768  U 3.500 mv 08 19 24 15 51 27  M 0.7 mg",
+    "F 79.11  R 253.79  P 50.387164  U 3.383 mv 08 19 24 15 52 28  M 0.9 mg",
+    "F 78.93  R 206.45  P 51.794432  U 3.366 mv 08 19 24 15 53 28  M 1.1 mg"
+  ]
+}
