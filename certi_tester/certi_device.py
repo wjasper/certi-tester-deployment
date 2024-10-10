@@ -55,7 +55,7 @@ def start_reading(timer, buffer, date_time):
                     live_data.append(certiString[:-2] + date_string)
                 else:
                     buffer["Data"].append(certiString[:-2])
-                    live_data.append(certiString[:-2] + date_string)
+                    live_data.append(certiString[:-2])
             
             time.sleep(1)
         
@@ -78,11 +78,10 @@ def start_reading(timer, buffer, date_time):
             delay = random.uniform(0, 10)
             time.sleep(delay) 
             
-            f_time = time.time() - 1
-            p_time = time.time() + 1
-            current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            formatted_string = f"F {f_time} R 100 P {p_time} {current_datetime}"
-            live_data.append(formatted_string)
+            #f_time = time.time() - 1
+            #p_time = time.time() + 1
+            #current_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            live_data.append("GARBAGE")
         
         test_type = buffer['TestType']
         file_name = ""
@@ -157,6 +156,8 @@ def connect_certi_tester(meta_data):
 
 def end_reading():
     global stop_flag
+    global is_reading_active
+    #is_reading_active = False
     stop_flag.set() 
     
 def get_live_data():
