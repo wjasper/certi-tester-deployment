@@ -86,7 +86,7 @@ Description:- In this method, we download the code from github, and the build ou
 Clone the repository to your desired location using the following command:
 
 ```
-git clone https://github.com/wjasper/certitester-deployment.git
+git clone https://github.com/wjasper/certi-tester-deployment.git
 ```
 
 ```
