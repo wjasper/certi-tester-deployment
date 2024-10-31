@@ -86,11 +86,11 @@ Description:- In this method, we download the code from github, and the build ou
 Clone the repository to your desired location using the following command:
 
 ```
-git clone https://github.com/nuttysunday/certitester-deployment.git
+git clone https://github.com/wjasper/certitester-deployment.git
 ```
 
 ```
-cd certitester-deployment
+cd certi-tester-deployment
 ```
 
 #### 2. Start the Containers
@@ -122,10 +122,13 @@ sudo docker-compose up --build -d
 <summary style="font-size: 22px;">Accessing the Website on the Network</summary>
 &nbsp;
 
+All ports open on the Raspberry Pi by default
+
 To access the website from other devices on your network:
 
 1. Open port 7784 on the host machine. On Raspberry Pi, this can be done using:
    ```
+   sudo apt install firewall-config
    sudo firewall-config
    ```
    For more details, refer to: [How to Open a Raspberry Pi Linux Port](https://raspberrypi.stackexchange.com/questions/69123/how-to-open-a-raspberry-pi-linux-port).
