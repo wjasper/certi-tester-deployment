@@ -10,7 +10,8 @@ Follow these steps to deploy the web server on your Raspberry Pi.
 
 2. Sometimes you may need to use sudo for running some commands.
 
-3. Make sure 7784 port is free and no other container or service is running on it
+3. Make sure 7784 port is free and no other container or service is running on it ```sudo lsof -i :7784```
+
 
 4. Have docker installed on your machine.
 
@@ -50,7 +51,7 @@ Follow these steps to deploy the web server on your Raspberry Pi.
    ```
 
    ```
-   curl -O https://raw.githubusercontent.com/nuttysunday/certi-tester-deployment/main/easy-installation/docker-compose.yml
+   curl -O https://raw.githubusercontent.com/wjasper/certi-tester-deployment/main/easy-installation/docker-compose.yml
    ```
 
    ```
@@ -135,4 +136,16 @@ To access the website from other devices on your network:
    ```http://<IP_ADDRESS>:7784```
 
 Replace `<IP_ADDRESS>` with the static IP address of your Raspberry Pi.
+</details>
+
+<details>
+<summary style="font-size: 22px;">Uninstall everything</summary>&nbsp;
+
+```
+docker-compose down --rmi all --volumes
+
+rm -rf certi_tester_deployment
+```
+
+
 </details>
