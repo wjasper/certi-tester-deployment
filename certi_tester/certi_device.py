@@ -96,7 +96,7 @@ def connect_port():
     print(f"Failed to connect to after 5 attempts.")
     return None
 
-def start_reading(timer, buffer, date_time):
+def start_reading(buffer, date_time):
     global is_reading_active
     print("in the function start reading")
     print(buffer)
