@@ -10,6 +10,37 @@ from decimal import Decimal
 import datetime
 
 
+def update_test_records(record):
+    # Start a connection to the database
+    connection = database_management.start_connection()
+    cursor = connection.cursor()
+
+    # Extract the values directly from the provided record
+    sample_tag = record.get("Sample Tag")
+    comment = record.get("Comment")
+    operator = record.get("Operator")
+
+    # Ensure sample_tag, comment, and operator are provided
+    if sample_tag and comment is not None and operator is not None:
+        # SQL query to update the comment and operator based on the sample_tag
+        sql_query = """
+            UPDATE test_record 
+            SET comment = %s, operator = %s
+            WHERE sample_tag = %s
+        """
+        
+        # Execute the query with the new data
+        cursor.execute(sql_query, (comment, operator, sample_tag))
+    else:
+        print(f"Skipping record with invalid data: {record}")
+
+    # Commit the changes and close the connection
+    connection.commit()
+    cursor.close()
+    database_management.end_connection(connection)
+
+    return
+
 def delete_test_records(test_records):
 
     print("hello")

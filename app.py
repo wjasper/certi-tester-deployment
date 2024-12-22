@@ -74,6 +74,14 @@ def delete_test_records():
     manage_test_records.delete_test_records(selected_values)
     return {"status": "true"}
 
+@app.route('/api/update-test-records', methods=['POST'])
+def update_test_records():
+    print("updating test records")
+    data = request.json
+    manage_test_records.update_test_records(data)
+    print(data)
+    return jsonify("buffer")
+
 @app.route('/api/analyse-test-records', methods=['POST'])
 def analyse_test_records():
     data = request.json
