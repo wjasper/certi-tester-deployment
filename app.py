@@ -3,7 +3,9 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 import database_management 
 from data_pipeline import data_processing, analyze_data, plot_graph, manage_test_records
-from certi_tester import certi_device
+from certi_tester import certi_device as certi_device_dev
+import threading
+import time
 
 app = Flask(__name__, static_folder='dist/assets', template_folder='dist')
 CORS(app)
@@ -91,63 +93,73 @@ def export_test_records():
     export_data = manage_test_records.export_test_records(selected_values)
     return jsonify(export_data)
 
-@app.route('/api/start-certi-tester-connection', methods=['POST'])
-def certi_tester_device():
-    test_meta_data = request.get_json()
-    print(test_meta_data)
-    # this function creates buffer, and starts reading immediatly if timer is give
-    # always going to return the buffer, but only need to render it sometimes
+last_known_data = None
+# Function to check if the Data field has changed
+def check_for_data_update():
+    global last_known_data
+    # Fetch the current 'Data' field from Redis
+    current_data = certi_device_dev.read_live_data_from_persistent_storage()
     
-    # could be with data without data
-    certi_tester_output = certi_device.connect_certi_tester(test_meta_data)
+    # Compare with the last known state
+    if current_data != last_known_data:
+        print("Data field updated!")
+        print("Updated Data:", current_data)
+        last_known_data = current_data
+        # Emit the updated data to the frontend through WebSockets
+        socketio.emit('data_update', {'data': current_data})
+
+
+# Polling loop (checks every 10 seconds)
+def poll_redis():
+    while True:
+        if certi_device_dev.is_reading_active: 
+            print("checking because timer active")
+            check_for_data_update()
+        time.sleep(10)  
+        
+
+# Monitor certi_device.is_reading_active for changes
+def monitor_timer_status():
+    previous_status = None  # Store the last known status
+    while True:
+        current_status = certi_device_dev.is_reading_active
+        if current_status != previous_status:  # If the status has changed
+            socketio.emit('timer_status', {'status': current_status})  # Emit the new status
+            print(f"Timer status changed to: {current_status}")
+            previous_status = current_status
     
-    print("Buffer by the machine sent", certi_tester_output)
-    
-    return jsonify(certi_tester_output)
+        time.sleep(1)
 
 @socketio.on('connect')
 def handle_connect():
-    print("connect_certi_tester called", flush=True)
-    print('Client connected')
-    # Start a background task to monitor live data
-    socketio.start_background_task(monitor_live_data)
+    print("Client connected")
+    print("Timer status" + str(certi_device_dev.is_reading_active))  
+    socketio.emit('timer_status', {'status':  certi_device_dev.is_reading_active})
+  
+# Start the monitoring thread
+threading.Thread(target=monitor_timer_status, daemon=True).start()
+threading.Thread(target=poll_redis, daemon=True).start()
 
-def monitor_live_data():
-    last_data_length = 0  # Variable to track the last emitted data length
 
-    while True:
-        if certi_device.is_reading_active:
-            data = certi_device.get_live_data()
 
-            # Emit data only if the length has changed
-            if len(data) != last_data_length:  # Check if the current data length is different from the last emitted length
-                if data:  # Check if data is not empty
-                    print("Emitting live data:", data, flush=True)
-                    socketio.emit('live_data', data)  # Emit data immediately
-                else:
-                    print("No live data available", flush=True)
-
-                last_data_length = len(data)  # Update the last emitted data length
-
-        socketio.sleep(1)  # Check for new data every second
-
-@app.route('/api/start-timer', methods=['POST'])
+@app.route('/api/start-reading', methods=['POST'])
 def start_timer_endpoint():
     # pass the buffer, date_time to frontend ig
+    socketio.emit('new_experiment_started')
     start_test_parameters = request.get_json()
-    print(start_test_parameters)
-    # Call the function to start the timer
-    print("start timer")
-    buffer = certi_device.start_reading(timer=None,buffer=start_test_parameters[0], date_time=start_test_parameters[1])  
-    print("Buffer by the machine sent if timer hit in the middle")
-    return jsonify(buffer)
-
-
-@app.route('/api/end-timer', methods=['GET'])
-def stop_timer_endpoint():
-    certi_device.end_reading()  # Call the function to stop the timer
-    print("Buffer by the machine sent if timer hit in the middle")
+    certi_device_dev.buffer_initialization(start_test_parameters)
     return jsonify("buffer")
+
+
+
+@app.route('/api/end-reading', methods=['GET'])
+def stop_timer_endpoint():
+    experiment_output = certi_device_dev.end_reading()  # Call the function to stop the timer
+    #experiment_output['Data'] = json.loads(experiment_output.get('Data', ''))
+    print("Buffer by the machine sent if timer hit in the middle")
+    print(experiment_output)
+    socketio.emit('experiment_data', {'experimentOutput': experiment_output})
+    return jsonify("experiment_output")
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=7784)
